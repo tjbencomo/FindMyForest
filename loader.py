@@ -30,8 +30,6 @@ question_map = {
 
 def get_questions():
     student_qs = list(question_map.keys())
-    student_qs.remove('Q1')
-    student_qs.remove('Q3')
     club_qs = [question_map[q] for q in student_qs]
     if len(student_qs) != len(club_qs):
         raise ValueError("Not all questions aligned!")
