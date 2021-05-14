@@ -7,20 +7,24 @@ about each club
 import numpy as np
 
 class Club():
-    def __init__(self, name, questions, answers):
+    def __init__(self, name, contact_name, contact_email, questions, answers):
         if len(questions) != len(answers):
             raise ValueError("Number of questions does not much number of answers!")
         self.name = name
+        self.contact_name = contact_name
+        self.contact_email = contact_email
         self.info = dict(zip(questions, answers))
 
     def __str__(self):
         return f"Club: {self.name}"
 
 class Student():
-    def __init__(self, name, questions, answers):
+    def __init__(self, name, email, affinity, questions, answers):
         if len(questions) != len(answers):
             raise ValueError("Number of questions does not much number of answers!")
         self.name = name
+        self.email = email
+        self.interestedInAffinity = affinity
         self.info = dict(zip(questions, answers))
 
     def __str__(self):
@@ -28,16 +32,26 @@ class Student():
 
 def categorical_loss(student, club):
     if student == club:
-        return 0
+        return 1
     return -1
 
 def numeric_loss(student, club):
     return -abs(student - club)
 
-def get_loss_type(response):
-    if isinstance(response, str):
-        return categorical_loss
-    elif isinstance(response, int) or isinstance(response, float):
+def list_loss(student, club):
+    slist = set(student.split(','))
+    clist = set(club.split(','))
+    return len(slist & clist)
+
+def get_loss_type(studentResponse, clubResponse):
+    if type(studentResponse) != type(clubResponse):
+        raise ValueError("Student and club answers are different types!")
+    if isinstance(studentResponse, str):
+        if ',' in studentResponse or ',' in clubResponse:
+            return list_loss
+        else:
+            return categorical_loss
+    elif isinstance(studentResponse, int) or isinstance(studentResponse, float):
         return numeric_loss
     else:
         raise ValueError(f"Student response is type {type(student)}. Similarity calculation is undefined")
@@ -47,7 +61,7 @@ def get_loss_type(response):
 def calculate_loss(student, club):
     loss = 0
     for q in student.info:
-        f = get_loss_type(student.info[q])
+        f = get_loss_type(student.info[q], club.info[q])
         loss += f(student.info[q], club.info[q])
     return loss
 
