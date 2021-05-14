@@ -44,8 +44,9 @@ def list_loss(student, club):
     return len(slist & clist)
 
 def get_loss_type(studentResponse, clubResponse):
-    if type(studentResponse) != type(clubResponse):
-        raise ValueError("Student and club answers are different types!")
+    if isinstance(studentResponse, str) or isinstance(clubResponse, str):
+        studentResponse = str(studentResponse)
+        clubResponse = str(clubResponse)
     if isinstance(studentResponse, str):
         if ',' in studentResponse or ',' in clubResponse:
             return list_loss
