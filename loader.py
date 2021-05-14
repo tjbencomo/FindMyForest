@@ -56,8 +56,9 @@ def load_clubs(fp, questions, qids):
         name = row['Q1']
         contact = row['Q20_1']
         email = row['Q20_2']
+        description = row['Q22']
         answers = row[questions].tolist()
-        c = Club(name, contact, email, qids, answers)
+        c = Club(name, contact, email, description, qids, answers)
         clubs.append(c)
     return clubs
 

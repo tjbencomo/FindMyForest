@@ -7,12 +7,13 @@ about each club
 import numpy as np
 
 class Club():
-    def __init__(self, name, contact_name, contact_email, questions, answers):
+    def __init__(self, name, contact_name, contact_email, description, questions, answers):
         if len(questions) != len(answers):
             raise ValueError("Number of questions does not much number of answers!")
         self.name = name
         self.contact_name = contact_name
         self.contact_email = contact_email
+        self.description = description
         self.info = dict(zip(questions, answers))
 
     def __str__(self):
