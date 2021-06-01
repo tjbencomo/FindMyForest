@@ -6,27 +6,32 @@ and Club objects for matching
 from match import Student, Club
 import pandas as pd
 
+sqs = ['Q1_' + str(i) for i in range(1, 11)] + ['Q3', 'Q12', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8'] + ['Q9_' + str(i) for i in range(1,5)] + ['Q16_' + str(i) for i in range(1, 6)]
+cqs = ['Q2_' + str(i) for i in range(1, 11)] + ['Q17', 'Q6', 'Q9', 'Q10', 'Q11', 'Q12', 'Q13'] + ['Q14_' + str(i) for i in range(1,5)] + ['Q16_' + str(i) for i in range(1, 6)]
+
+question_map = dict(zip(sqs, cqs))
+
 # Maps student question to club question
-question_map = {
-        'Q1' : 'Q2',
-        'Q3' : 'Q17',
-        'Q12' : 'Q6',
-        'Q13': 'Q7',
-        'Q4' : 'Q9',
-        'Q5' : 'Q10',
-        'Q6' : 'Q11',
-        'Q7' : 'Q12',
-        'Q8' : 'Q13',
-        'Q9_1' : 'Q14_1',
-        'Q9_2' : 'Q14_2',
-        'Q9_3' : 'Q14_3',
-        'Q9_4' : 'Q14_4',
-        'Q16_1' : 'Q16_1',
-        'Q16_2' : 'Q16_2',
-        'Q16_3' : 'Q16_3',
-        'Q16_4' : 'Q16_4',
-        'Q16_5' : 'Q16_5'
-        }
+# question_map = {
+#         'Q1' : 'Q2',
+#         'Q3' : 'Q17',
+#         'Q12' : 'Q6',
+#         'Q13': 'Q7',
+#         'Q4' : 'Q9',
+#         'Q5' : 'Q10',
+#         'Q6' : 'Q11',
+#         'Q7' : 'Q12',
+#         'Q8' : 'Q13',
+#         'Q9_1' : 'Q14_1',
+#         'Q9_2' : 'Q14_2',
+#         'Q9_3' : 'Q14_3',
+#         'Q9_4' : 'Q14_4',
+#         'Q16_1' : 'Q16_1',
+#         'Q16_2' : 'Q16_2',
+#         'Q16_3' : 'Q16_3',
+#         'Q16_4' : 'Q16_4',
+#         'Q16_5' : 'Q16_5'
+#         }
 
 def get_questions():
     student_qs = list(question_map.keys())
@@ -34,11 +39,14 @@ def get_questions():
     if len(student_qs) != len(club_qs):
         raise ValueError("Not all questions aligned!")
     qids = list(range(len(student_qs)))
+    # for i in range(len(qids)):
+    #     print(f"Question ID: {qids[i]}; Question #: {student_qs[i]}")
     return student_qs, club_qs, qids
 
 
 def load_students(fp, questions, qids):
     df = pd.read_csv(fp)
+    df = df.fillna(0)
     students = []
     for index, row in df.iterrows():
         name = row['Q14']
@@ -51,6 +59,7 @@ def load_students(fp, questions, qids):
 
 def load_clubs(fp, questions, qids):
     df = pd.read_csv(fp)
+    df = df.fillna(0)
     clubs = []
     for index, row in df.iterrows():
         name = row['Q1']
